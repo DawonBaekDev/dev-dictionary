@@ -178,5 +178,15 @@
   color: #7a8195;
   text-align: center;
   background: #ffffff;
-}
+  }
+  .detailButton {
+    display: inline-block;
+    margin-top: 20px;
+    border: 0;
+    color: #6558d3;
+    font-weight: 700;
+    text-decoration: none;
+    background: transparent;
+    cursor: pointer;
+  }
 }

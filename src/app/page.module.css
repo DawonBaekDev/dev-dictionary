@@ -171,4 +171,12 @@
   .categories button {
     flex-shrink: 0;
   }
+  .emptyState {
+  padding: 60px 20px;
+  border: 1px dashed #cfd4e2;
+  border-radius: 20px;
+  color: #7a8195;
+  text-align: center;
+  background: #ffffff;
+}
 }

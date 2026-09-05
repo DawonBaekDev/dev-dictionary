@@ -1,3 +1,5 @@
+"use client"
+import { useState } from "react";
 import styles from "./page.module.css";
 
 const terms = [
@@ -19,9 +21,44 @@ const terms = [
     category: "데이터",
     description: "여러 데이터를 체계적으로 저장하고 관리하는 공간",
   },
-];
+  {
+    id: 4,
+    name: "서버",
+    category: "웹",
+    description: "요청을 받아 필요한 데이터나 기능을 제공하는 프로그램",
+  },
+  {
+    id: 5,
+    name: "Props",
+    category: "React",
+    description: "부모 컴포넌트가 자식 컴포넌트에 전달하는 데이터",
+  },
+  {
+    id: 6,
+    name: "MongoDB",
+    category: "데이터",
+    description: "데이터를 문서 형태로 저장하는 NoSQL 데이터베이스",
+  },
+]
+
+const categories = ["전체", "웹", "React", "데이터"]
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("전체")
+
+  const filteredTerms = terms.filter((term) => {
+    const query = searchQuery.toLowerCase().trim()
+    const matchesSearch = 
+      term.name.toLowerCase().includes(query) ||
+      term.description.toLowerCase().includes(query)
+    const matchesCategory = 
+      selectedCategory === "전체" ||
+      term.category === selectedCategory
+
+    return matchesSearch && matchesCategory
+  })
+
   return (
     <main className={styles.page}>
       <div className={styles.container}>
@@ -37,39 +74,58 @@ export default function Home() {
           <label htmlFor="term-search" className={styles.srOnly}>
             개발 용어 검색
           </label>
+
           <input
             id="term-search"
             className={styles.searchInput}
             type="search"
             placeholder="궁금한 개발 용어를 검색해 보세요"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
           />
         </section>
 
         <nav className={styles.categories} aria-label="용어 카테고리">
-          <button className={styles.activeCategory}>전체</button>
-          <button>웹</button>
-          <button>React</button>
-          <button>데이터</button>
+          {categories.map((category) => (
+            <button
+              type="button"
+              key={category}
+              className={
+                selectedCategory === category
+                  ? styles.activeCategory
+                  : ""
+              }
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </button>
+          ))}
         </nav>
 
         <section>
           <div className={styles.sectionHeader}>
             <h2>개발 용어</h2>
-            <span>{terms.length}개의 용어</span>
+            <span>{filteredTerms.length}개의 용어</span>
           </div>
 
-          <div className={styles.termGrid}>
-            {terms.map((term) => (
-              <article className={styles.termCard} key={term.id}>
-                <span className={styles.tag}>{term.category}</span>
-                <h3>{term.name}</h3>
-                <p>{term.description}</p>
-                <button className={styles.detailButton}>
-                  자세히 보기 →
-                </button>
-              </article>
-            ))}
-          </div>
+          {filteredTerms.length > 0 ? (
+            <div className={styles.termGrid}>
+              {filteredTerms.map((term) => (
+                <article className={styles.termCard} key={term.id}>
+                  <span className={styles.tag}>{term.category}</span>
+                  <h3>{term.name}</h3>
+                  <p>{term.description}</p>
+                  <button type="button" className={styles.detailButton}>
+                    자세히 보기 →
+                  </button>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.emptyState}>
+              검색 결과가 없습니다. 다른 단어를 검색해 보세요.
+            </p>
+          )}
         </section>
       </div>
     </main>

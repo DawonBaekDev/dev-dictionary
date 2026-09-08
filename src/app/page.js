@@ -3,20 +3,20 @@
 import { useState } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
-import { terms, categories } from "@/data/terms";
+import { words, categories } from "@/data/words";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("전체")
 
-  const filteredTerms = terms.filter((term) => {
+  const filteredWords = words.filter((word) => {
     const query = searchQuery.toLowerCase().trim()
     const matchesSearch = 
-      term.name.toLowerCase().includes(query) ||
-      term.description.toLowerCase().includes(query)
+      word.name.toLowerCase().includes(query) ||
+      word.description.toLowerCase().includes(query)
     const matchesCategory = 
       selectedCategory === "전체" ||
-      term.category === selectedCategory
+      word.category === selectedCategory
 
     return matchesSearch && matchesCategory
   })
@@ -67,18 +67,18 @@ export default function Home() {
         <section>
           <div className={styles.sectionHeader}>
             <h2>개발 용어</h2>
-            <span>{filteredTerms.length}개의 용어</span>
+            <span>{filteredWords.length}개의 용어</span>
           </div>
 
-          {filteredTerms.length > 0 ? (
-            <div className={styles.termGrid}>
-              {filteredTerms.map((term) => (
-                <article className={styles.termCard} key={term.id}>
-                  <span className={styles.tag}>{term.category}</span>
-                  <h3>{term.name}</h3>
-                  <p>{term.description}</p>
+          {filteredWords.length > 0 ? (
+            <div className={styles.wordGrid}>
+              {filteredWords.map((word) => (
+                <article className={styles.wordCard} key={word.id}>
+                  <span className={styles.tag}>{word.category}</span>
+                  <h3>{word.name}</h3>
+                  <p>{word.description}</p>
                   <Link 
-                    href={`/terms/${term.id}`} 
+                    href={`/words/${word.id}`} 
                     className={styles.detailButton}>
                       자세히 보기 →</Link>
                 </article>

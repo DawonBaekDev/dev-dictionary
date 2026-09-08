@@ -1,4 +1,4 @@
-export const terms = [
+export const words = [
   {
     id: 1,
     name: "API",

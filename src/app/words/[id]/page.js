@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { terms } from "@/data/terms";
+import { words } from "@/data/words";
 import styles from "./page.module.css";
 
-export default async function TermDetailPage({ params }) {
+export default async function WordDetailPage({ params }) {
   const { id } = await params;
 
-  const term = terms.find((item) => item.id === Number(id));
+  const word = words.find((item) => item.id === Number(id));
 
-  if (!term) {
+  if (!word) {
     notFound();
   }
 
@@ -20,13 +20,13 @@ export default async function TermDetailPage({ params }) {
         </Link>
 
         <article className={styles.card}>
-          <span className={styles.tag}>{term.category}</span>
-          <h1>{term.name}</h1>
-          <p className={styles.description}>{term.description}</p>
+          <span className={styles.tag}>{word.category}</span>
+          <h1>{word.name}</h1>
+          <p className={styles.description}>{word.description}</p>
 
           <section className={styles.exampleSection}>
             <h2>이렇게 사용해요</h2>
-            <p>{term.example}</p>
+            <p>{word.example}</p>
           </section>
         </article>
       </div>

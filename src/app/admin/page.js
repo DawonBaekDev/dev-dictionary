@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 
@@ -27,6 +27,43 @@ export default function AdminPage() {
 
   // 중복 제출을 막기 위해 요청 상태를 저장한다.
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // MongoDB에서 불러온 단어 목록을 저장합니다.
+  const [words, setWords] = useState([]);
+
+  // 단어 목록을 불러오는 중인지 관리합니다.
+  const [isLoadingWords, setIsLoadingWords] = useState(true);
+
+  // 목록 조회 중 발생한 오류 메시지를 저장합니다.
+  const [listError, setListError] = useState("");
+
+  // 관리자 페이지가 처음 나타날 때 단어 목록을 불러옵니다.
+  useEffect(() => {
+    async function loadWords() {
+        try {
+        // GET /api/words를 호출해 MongoDB의 단어를 요청합니다.
+        const response = await fetch("/api/words");
+        const data = await response.json();
+
+        // 정상적인 응답이 아니면 오류로 처리합니다.
+        if (!response.ok) {
+            throw new Error(
+            data.message || "단어 목록을 불러오지 못했습니다."
+            );
+        }
+
+        // API에서 받은 단어 배열을 상태에 저장합니다.
+        setWords(data.words);
+        } catch (error) {
+        setListError(error.message);
+        } finally {
+        // 성공 여부와 관계없이 로딩 상태를 종료합니다.
+        setIsLoadingWords(false);
+        }
+    }
+
+    loadWords();
+    }, []);
 
   // 입력창의 값이 바뀔 때 해당 항목만 수정한다.
   function handleChange(event) {
@@ -72,6 +109,11 @@ export default function AdminPage() {
         message: data.message,
       });
       setFormData(initialForm);
+      // 새로 등록한 단어를 관리자 목록에도 즉시 추가합니다.
+      setWords((previousWords) =>
+        [...previousWords, data.word].sort((firstWord, secondWord) =>
+            firstWord.name.localeCompare(secondWord.name, "ko"))
+        );
     } catch (error) {
       setResult({
         type: "error",
@@ -200,6 +242,40 @@ export default function AdminPage() {
             </p>
           )}
         </section>
+        <section className={`${styles.card} ${styles.managementCard}`}>
+            <div className={styles.listHeader}>
+                <h2>등록된 단어</h2>
+                <span>{words.length}개</span>
+            </div>
+
+            {isLoadingWords ? (
+                <p className={styles.listMessage}>
+                단어 목록을 불러오는 중입니다...
+                </p>
+            ) : listError ? (
+                <p className={styles.listError}>{listError}</p>
+            ) : (
+                <ul className={styles.wordList}>
+                {words.map((word) => (
+                    <li className={styles.wordItem} key={word._id}>
+                    <div>
+                        <strong>{word.name}</strong>
+                        <span className={styles.category}>
+                        {word.category}
+                        </span>
+                    </div>
+
+                    <Link
+                        href={`/words/${word.slug}`}
+                        className={styles.detailLink}
+                    >
+                        상세 보기
+                    </Link>
+                    </li>
+                ))}
+                </ul>
+            )}
+            </section>
       </div>
     </main>
   );

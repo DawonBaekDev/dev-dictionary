@@ -103,3 +103,76 @@
   color: #a52c35;
   background: #fff0f1;
 }
+
+.managementCard {
+  margin-top: 24px;
+}
+
+.listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.listHeader h2 {
+  margin: 0;
+}
+
+.listHeader span {
+  color: #687087;
+  font-weight: 700;
+}
+
+.wordList {
+  display: grid;
+  gap: 12px;
+  max-height: 520px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.wordItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e1e5ee;
+  border-radius: 12px;
+}
+
+.wordItem div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.category {
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #6558d3;
+  font-size: 12px;
+  font-weight: 700;
+  background: #efedff;
+}
+
+.detailLink {
+  flex-shrink: 0;
+  color: #6558d3;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.listMessage,
+.listError {
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+.listError {
+  color: #a52c35;
+}

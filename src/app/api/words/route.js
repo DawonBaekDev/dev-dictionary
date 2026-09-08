@@ -39,3 +39,122 @@ export async function GET() {
     );
   }
 }
+
+// /api/words로 들어오는 POST 요청을 처리한다.
+export async function POST(request) {
+  try {
+    // 브라우저가 보낸 JSON 데이터를 JavaScript 객체로 변환한다.
+    const body = await request.json();
+
+    // 브라우저가 전송한 각 입력값을 body 객체에서 꺼낸다.
+    const {
+      name,
+      slug,
+      category,
+      description,
+      example,
+      codeLanguage,
+      codeExample,
+    } = body;
+
+    // 모든 값이 문자열이고 내용이 입력되어 있는지 검사한다.
+    const requiredValues = [
+      name,
+      slug,
+      category,
+      description,
+      example,
+      codeExample,
+    ];
+
+    const hasEmptyValue = requiredValues.some(
+      (value) =>
+        typeof value !== "string" || value.trim() === ""
+    );
+
+    if (hasEmptyValue) {
+      return Response.json(
+        {
+          message: "모든 항목을 입력해 주세요.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    // 주소에 사용할 slug를 소문자로 통일한다.
+    const normalizedSlug = slug.toLowerCase().trim();
+
+    // slug에는 영문 소문자, 숫자, 하이픈만 허용한다.
+    if (!/^[a-z0-9-]+$/.test(normalizedSlug)) {
+      return Response.json(
+        {
+          message: "주소 이름은 영문, 숫자, 하이픈만 사용할 수 있습니다.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    // 로컬 MongoDB에 연결한다.
+    await connectDB();
+
+    // 같은 slug를 사용하는 단어가 있는지 확인한다.
+    const existingWord = await Word.findOne({
+      slug: normalizedSlug,
+    });
+
+    if (existingWord) {
+      return Response.json(
+        {
+          message: "이미 같은 주소 이름을 사용하는 단어가 있습니다.",
+        },
+        {
+          status: 409,
+        }
+      );
+    }
+
+    // 검사를 통과한 단어를 MongoDB에 저장한다.
+    const createdWord = await Word.create({
+      name: name.trim(),
+      slug: normalizedSlug,
+      category: category.trim(),
+      description: description.trim(),
+      example: example.trim(),
+
+      // 선택한 코드 종류와 입력한 코드를 MongoDB에 함께 저장한다.
+      codeLanguage: codeLanguage.trim(),
+      codeExample: codeExample.trim(),
+    });
+
+    // 생성된 MongoDB 문서를 일반 객체로 바꾼다.
+    const wordObject = createdWord.toObject();
+
+    return Response.json(
+      {
+        message: "새 단어가 등록되었습니다.",
+        word: {
+          ...wordObject,
+          _id: wordObject._id.toString(),
+        },
+      },
+      {
+        // 201은 새로운 데이터 생성에 성공했다는 상태 코드다.
+        status: 201,
+      }
+    );
+  } catch (error) {
+    return Response.json(
+      {
+        message: "단어 등록에 실패했습니다.",
+        error: error.message,
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+}

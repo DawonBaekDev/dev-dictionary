@@ -39,6 +39,22 @@ export default async function WordDetailPage({ params }) {
             <h2>이렇게 사용해요</h2>
             <p>{word.example}</p>
           </section>
+
+          {/* 코드 예시가 등록된 단어에서만 코드 영역을 보여준다. */}
+          {word.codeExample && (
+            <section className={styles.codeSection}>
+              <div className={styles.codeHeader}>
+                <h2>코드 사용 예시</h2>
+                <span>{word.codeLanguage}</span>
+              </div>
+
+              {/* pre 태그는 코드의 줄바꿈과 공백을 그대로 유지한다. */}
+              <pre className={styles.codeBlock}>
+                <code>{word.codeExample}</code>
+              </pre>
+            </section>
+          )}
+          
         </article>
       </div>
     </main>

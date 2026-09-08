@@ -20,6 +20,14 @@ const seedWords = [
     category: "웹",
     description: "서로 다른 프로그램이 기능이나 데이터를 주고받는 통로",
     example: "날씨 앱이 기상청 API를 통해 날씨 데이터를 받아옵니다.",
+    // 상세 페이지에 표시할 코드 종류다.
+    codeLanguage: "JavaScript",
+
+    // 백틱을 사용하면 여러 줄의 코드를 문자열로 저장할 수 있다.
+    codeExample: `const response = await fetch("/api/words");
+    const data = await response.json();
+
+    console.log(data.words);`,
   },
   {
     name: "컴포넌트",
@@ -27,6 +35,10 @@ const seedWords = [
     category: "React",
     description: "화면을 구성하는 재사용 가능한 작은 UI 조각",
     example: "버튼과 검색창을 각각 컴포넌트로 만들 수 있습니다.",
+    codeLanguage: "JSX",
+    codeExample: `function Welcome() {
+      return <h1>안녕하세요!</h1>;
+    }`,
   },
   {
     name: "데이터베이스",
@@ -34,6 +46,10 @@ const seedWords = [
     category: "데이터",
     description: "여러 데이터를 체계적으로 저장하고 관리하는 공간",
     example: "개발 단어의 이름과 설명을 데이터베이스에 저장합니다.",
+    codeLanguage: "MongoDB",
+    codeExample: `db.words.find({
+      category: "React"
+    });`,
   },
 ];
 

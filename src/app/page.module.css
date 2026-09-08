@@ -97,13 +97,13 @@
   font-size: 14px;
 }
 
-.termGrid {
+.wordGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
 }
 
-.termCard {
+.wordCard {
   padding: 26px;
   border: 1px solid #e1e4ed;
   border-radius: 20px;
@@ -113,7 +113,7 @@
     box-shadow 0.2s ease;
 }
 
-.termCard:hover {
+.wordCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 14px 34px rgba(42, 48, 74, 0.1);
 }
@@ -128,12 +128,12 @@
   font-weight: 700;
 }
 
-.termCard h3 {
+.wordCard h3 {
   margin: 18px 0 10px;
   font-size: 24px;
 }
 
-.termCard p {
+.wordCard p {
   min-height: 48px;
   margin: 0;
   color: #687087;
